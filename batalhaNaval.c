@@ -1,43 +1,61 @@
 #include <stdio.h>
 
+#define TAMANHO 10
+#define DESTROYER 3
+
 int main()
 {
-    int tamanho = 10;
-    char coluna[10] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'};
-    int mapa[10][10] = {0};
-    int destroyer1[] = {3, 3, 3};
-    int destroyer2[] = {3, 3, 3};
+    char linha[TAMANHO] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'};
+    int mapa[TAMANHO][TAMANHO] = {0};
+    int colunaDestroyer[] = {0, 4, 8, 9};
 
     printf("TABULEIRO BATALHA NAVAL \n");
     printf("   ");
 
-    // Colocando primeiro navio
-    int linha1 = 2, coluna1 = 4;
-    for (int x = 0; x < 3; x++)
-    {
-        mapa[linha1][coluna1 + x] = destroyer1[x];
-    }
+    // Posicoes Destroyer
+    // O primeiro e segundo valor é a posição X e Y, e o terceiro define a direção ( 1 - Horizontal, 2 - Vertical, 3 - Diagonal, 4 - Diagonal Inverse);
+    int posicoesDestroyer[4][3] = {
+        {0, 2, 1},
+        {6, 9, 2},
+        {2, 1, 3},
+        {7, 3, 4}};
 
-    // Colocando segundo navio
-    int linha2 = 6, coluna2 = 2;
-    for (int x = 0; x < 3; x++)
+    for (int x = 0; x < 4; x++)
     {
-        mapa[linha2 + x][coluna2] = destroyer2[x];
+        for (int y = 0; y < DESTROYER; y++)
+        {
+            if (posicoesDestroyer[x][2] == 1)
+            {
+                mapa[posicoesDestroyer[x][0]][posicoesDestroyer[x][1] + y] = DESTROYER;
+            }
+            else if (posicoesDestroyer[x][2] == 2)
+            {
+                mapa[posicoesDestroyer[x][0] + y][posicoesDestroyer[x][1]] = DESTROYER;
+            }
+            else if (posicoesDestroyer[x][2] == 3)
+            {
+                mapa[posicoesDestroyer[x][0] + y][posicoesDestroyer[x][1] + y] = DESTROYER;
+            }
+            else if (posicoesDestroyer[x][2] == 4)
+            {
+                mapa[posicoesDestroyer[x][0] - y][posicoesDestroyer[x][1] + y] = DESTROYER;
+            }
+        }
     }
 
     // Gerando as colunas
-    for (int x = 0; x < tamanho; x++)
+    for (int x = 0; x < TAMANHO; x++)
     {
-        printf("%c ", coluna[x]);
+        printf("%c ", linha[x]);
     }
     printf("\n");
 
     // Gerando o restante do tabuleiro
-    for (int x = 0; x < tamanho; x++)
+    for (int x = 0; x < TAMANHO; x++)
     {
         int linha = x + 1;
         linha == 10 ? printf("%d ", x + 1) : printf(" %d ", x + 1);
-        for (int y = 0; y < tamanho; y++)
+        for (int y = 0; y < TAMANHO; y++)
         {
             printf("%d ", mapa[x][y]);
         }
